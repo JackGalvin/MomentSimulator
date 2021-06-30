@@ -4,23 +4,32 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.scene.text.*;
 
 public class Main extends Application{
     //global Variables
-    float pivotPosition = 0; //0 is the default position until set
+    //double pivotPosition = 0; //0 is the default position until set
+    //double plankLength = 100;
     public static void main(String[] args) { launch(args);}
 
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("TestMoments"); //name of window
-        Button button = new Button("Click me");
+        
+        guiCreation.MomentsMenu.setStyle("-fx-background-color: #92e3df;"); 
+        //making config title
+        Label MomentsMenuTitle = new Label("Configuration Menu");
+        Font MomentsMenuTitleFont = new Font("Arial",20);
+        MomentsMenuTitle.setFont(MomentsMenuTitleFont);
+        guiCreation.MomentsMenu.getChildren().add(MomentsMenuTitle);
 
-        StackPane layout = new StackPane(); //layout where every object is stacked ontop of each other.
-        layout.getChildren().add(button);
+        //add objects to MomentsMenu
+        guiCreation.MomentsMenu.getChildren().add(guiCreation.addPlankConfig());
 
-        Scene scene = new Scene(layout, 300, 500); //window dimensions and main layout added.
+        //setting MomentMenu in canvas
+        BorderPane canvas = new BorderPane(); //create canvas/layout object
+        canvas.setRight(guiCreation.MomentsMenu);
+        Scene scene = new Scene(canvas, 1600, 900); //window dimensions and main layout added.
         primaryStage.setScene(scene); //give stage attributes from scene object
         primaryStage.show();
-
-        //ForceClass.pivotPosition = pivotPosition; (pass value)
     }
 }

@@ -1,16 +1,15 @@
 package Project;
+import java.math.*;
+
 
 public class ForceClass {
     private float magnitude;
-    private boolean antiClockWise;
     private double angle;
     private double position;
     private double moment;
-    public static double pivotPosition; //static makes pivot position for all forces global.
 
-    public ForceClass(float magnitude,boolean antiClockWise,double angle,double position){
+    public ForceClass(float magnitude,double angle,double position){
         this.magnitude = magnitude;
-        this.antiClockWise = antiClockWise;
         this.angle = angle;
         this.position = position;
         this.moment = getMoment();
@@ -19,9 +18,6 @@ public class ForceClass {
     public float getMagnitude() {
         return magnitude;
     }
-    public boolean isAntiClockWise() {
-        return antiClockWise;
-    }
     public double getAngle() {
         return angle;
     }
@@ -29,9 +25,9 @@ public class ForceClass {
         return position;
     }
     public double getDistanceFromPivot() { 
-        return position-pivotPosition;
+        return position-currentSimulation.pivotPosition;
     }
     public double getMoment() {
-        return magnitude*getDistanceFromPivot();
+        return magnitude*Math.cos(angle)*getDistanceFromPivot();
     }
 }
