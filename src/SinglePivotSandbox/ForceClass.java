@@ -1,12 +1,11 @@
-package Project;
-import java.math.*;
+package SinglePivotSandbox;
 
 
 public class ForceClass {
     private float magnitude;
     private double angle;
     private double position;
-    private double moment;
+    private double moment; //not needed but good for clarification for what the object has.
 
     public ForceClass(float magnitude,double angle,double position){
         this.magnitude = magnitude;
