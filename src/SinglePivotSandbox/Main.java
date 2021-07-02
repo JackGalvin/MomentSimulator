@@ -19,12 +19,13 @@ public class Main extends Application{
         MomentsMenuTitle.setFont(MomentsMenuTitleFont);
         guiCreation.MomentsMenu.getChildren().add(MomentsMenuTitle);
 
+        guiCreation.simulation = new currentSimulation();
         //add objects to MomentsMenu
         guiCreation.MomentsMenu.getChildren().add(guiCreation.addPlankConfig());
 
         //creating VBox for moment Information RM,ACW,CW  temp/wip no all made global variables under guiCreation
         VBox momentInformation = new VBox();
-        momentInformation.getChildren().addAll(guiCreation.sumOfCWLabel,guiCreation.sumOfACWLabel,guiCreation.resultantMomentLabel);
+        //momentInformation.getChildren().addAll(guiCreation.sumOfCWLabel,guiCreation.sumOfACWLabel,guiCreation.resultantMomentLabel);
 
         //setting MomentMenu in canvas
         BorderPane canvas = new BorderPane(); //create canvas/layout object

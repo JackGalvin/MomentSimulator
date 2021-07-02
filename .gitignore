@@ -23,4 +23,5 @@
 hs_err_pid*
 
 #.json files
-*.json
+.vscode/launch.json
+.vscode/settings.json

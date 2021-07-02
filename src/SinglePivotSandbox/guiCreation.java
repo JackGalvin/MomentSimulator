@@ -1,5 +1,4 @@
 package SinglePivotSandbox;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.text.NumberFormat;
@@ -7,10 +6,7 @@ import java.text.NumberFormat;
 public class guiCreation{
 
     public static VBox MomentsMenu = new VBox(10);
-    public static Label sumOfCWLabel = new Label();
-    public static Label sumOfACWLabel = new Label();
-    public static Label resultantMomentLabel = new Label();
-
+    public static currentSimulation simulation;
 
     public static HBox addPlankConfig(){
         HBox plankConfig = new HBox();
@@ -61,8 +57,9 @@ public class guiCreation{
     public static HBox addForceInput(double plankLength, double pivotPosition){
         //creating magnitude input textField
         HBox forceConfig = new HBox();
-        TextField magInput = new TextField("Magnitude");
 
+        //textField to add magnitude
+        TextField magInput = new TextField("Magnitude");
 
         //angle input and all attributes
         VBox forceAngleSection = new VBox(); forceAngleSection.setStyle("-fx-background-color: #989882;");
@@ -75,7 +72,6 @@ public class guiCreation{
         angleInputTextField.textProperty().bindBidirectional(angleInputSlider.valueProperty(), NumberFormat.getNumberInstance());
         forceAngleSection.getChildren().addAll(angleLabel,angleTip,angleInputSlider,angleInputTextField);
 
-
         //position input and all attributes
         VBox forcePositionSection = new VBox(); forcePositionSection.setStyle("-fx-background-color: #929292;");
         Label positionLabel = new Label("Position");
@@ -86,12 +82,11 @@ public class guiCreation{
         positionInputTextField.textProperty().bindBidirectional(positionInputSlider.valueProperty(), NumberFormat.getNumberInstance());
         forcePositionSection.getChildren().addAll(positionLabel,positionInputSlider,positionInputTextField);
         
-
         //submit force button and action
         Button submitForce = new Button("submit force");
         submitForce.setOnAction(e -> {
-            ForceClass createdForce = new ForceClass(Integer.parseInt(magInput.getText()),Math.toRadians(angleInputSlider.getValue()),positionInputSlider.getValue());
-            currentSimulation.addForce(createdForce);
+            forceClass createdForce = new forceClass(Integer.parseInt(magInput.getText()),Math.toRadians(angleInputSlider.getValue()),positionInputSlider.getValue());
+            simulation.addForce(createdForce);
             //need to remove/replace children with inputted data.
         });
         forceConfig.getChildren().addAll(magInput,forceAngleSection,forcePositionSection,submitForce);
@@ -99,12 +94,12 @@ public class guiCreation{
     }
 
     public static void updateInformation(){
-        String currentSumOfCW = Double.toString(currentSimulation.getSumOfCW());
-        guiCreation.sumOfCWLabel.setText(currentSumOfCW);
-        String currentSumOfACW = Double.toString(currentSimulation.getSumOfACW());
-        guiCreation.sumOfACWLabel.setText(currentSumOfACW);
-        String currentResultantMoment = Double.toString(currentSimulation.getResultantMoment());
-        guiCreation.resultantMomentLabel.setText(currentResultantMoment);
+        //String currentSumOfCW = Double.toString(currentSimulation.getSumOfCW());
+        //guiCreation.sumOfCWLabel.setText(currentSumOfCW);
+        //String currentSumOfACW = Double.toString(currentSimulation.getSumOfACW());
+        //guiCreation.sumOfACWLabel.setText(currentSumOfACW);
+        //String currentResultantMoment = Double.toString(currentSimulation.getResultantMoment());
+        //guiCreation.resultantMomentLabel.setText(currentResultantMoment);
     } 
 
 }
