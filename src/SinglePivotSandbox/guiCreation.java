@@ -6,13 +6,17 @@ import java.text.NumberFormat;
 public class guiCreation{
 
     public static VBox MomentsMenu = new VBox(10);
+    public static VBox momentInformation = new VBox();
+    public static Label labelACW = new Label();
+    public static Label labelCW = new Label();
+    public static Label labelRM = new Label();
     public static currentSimulation simulation;
 
     public static HBox addPlankConfig(){
         HBox plankConfig = new HBox();
         plankConfig.setStyle("-fx-background-color: #9933FF;");
         Label labelPlank = new Label("Plank Length");
-        TextField sizeOfPlank = new TextField("Plank Length");
+        TextField sizeOfPlank = new TextField("Plank Length"); //still a textField because I don't want a max or min value
         Button submitPlank = new Button("Submit");
         submitPlank.setOnAction(e -> {
             currentSimulation.plankLength = Float.parseFloat(sizeOfPlank.getText()); //add double check //set plank length to a global variable under the class 
@@ -28,20 +32,21 @@ public class guiCreation{
     public static HBox addPivotConfig(){
         HBox pivotConfig = new HBox();
         pivotConfig.setStyle("-fx-background-color: #FF33BB;");
-        Slider pivotPositionSlider = new Slider(); 
-        pivotPositionSlider.setMin(0-(currentSimulation.plankLength/2)); pivotPositionSlider.setMax(currentSimulation.plankLength/2); pivotPositionSlider.setValue(0);  //setting sliders max min and initial value
-        TextField pivotPositionTextField = new TextField();
-        pivotPositionTextField.textProperty().bindBidirectional(pivotPositionSlider.valueProperty(), NumberFormat.getNumberInstance());
+        Slider pivotPositionSlider = new Slider();
+        double minValue = 0-(currentSimulation.plankLength/2); double maxValue = (currentSimulation.plankLength/2); int initialValue = 0; //creating min/max/initial values
+        pivotPositionSlider.setMin(minValue); pivotPositionSlider.setMax(maxValue); pivotPositionSlider.setValue(initialValue);  //setting sliders max/min/initial values
+        IntField pivotPositionIntField = new IntField(minValue,maxValue,initialValue); //min/max/initial set by constructor
+        pivotPositionIntField.textProperty().bindBidirectional(pivotPositionSlider.valueProperty(), NumberFormat.getNumberInstance());
         
         Button submitPivot = new Button("Submit");
         submitPivot.setOnAction(e -> {
             currentSimulation.pivotPosition = pivotPositionSlider.getValue();
-            pivotConfig.getChildren().removeAll(pivotPositionSlider,pivotPositionTextField,submitPivot);
+            pivotConfig.getChildren().removeAll(pivotPositionSlider,pivotPositionIntField,submitPivot);
             Label pivotValue = new Label("Pivot at: " + currentSimulation.pivotPosition);
             pivotConfig.getChildren().add(pivotValue);
             MomentsMenu.getChildren().add(addForcesConfig());
         });
-        pivotConfig.getChildren().addAll(pivotPositionSlider,pivotPositionTextField,submitPivot);
+        pivotConfig.getChildren().addAll(pivotPositionSlider,pivotPositionIntField,submitPivot);
         return pivotConfig; //return so that they can be added to MomentsMenu
     }
 
@@ -66,8 +71,9 @@ public class guiCreation{
         Label angleLabel = new Label("Angle");
         Label angleTip = new Label("Angle is measured from the normal");
         Slider angleInputSlider = new Slider(); 
-        angleInputSlider.setMin(-90); angleInputSlider.setMax(90); angleInputSlider.setValue(0); //setting sliders max min and initial value
-        TextField angleInputTextField = new TextField();
+        double minAngleValue = -90; double maxAngleValue = 90; int initialAngleValue = 0; //creating min/max/initial values for angleInputs
+        angleInputSlider.setMin(minAngleValue); angleInputSlider.setMax(maxAngleValue); angleInputSlider.setValue(initialAngleValue); //setting sliders max min and initial value
+        IntField angleInputTextField = new IntField(minAngleValue,maxAngleValue,initialAngleValue); //min/max/initial set by constructor
         //code to link slider and textfield together.
         angleInputTextField.textProperty().bindBidirectional(angleInputSlider.valueProperty(), NumberFormat.getNumberInstance());
         forceAngleSection.getChildren().addAll(angleLabel,angleTip,angleInputSlider,angleInputTextField);
@@ -75,11 +81,12 @@ public class guiCreation{
         //position input and all attributes
         VBox forcePositionSection = new VBox(); forcePositionSection.setStyle("-fx-background-color: #929292;");
         Label positionLabel = new Label("Position");
-        Slider positionInputSlider = new Slider(); 
-        positionInputSlider.setMin(0-(plankLength/2)); positionInputSlider.setMax(plankLength/2); positionInputSlider.setValue(0); //setting sliders max min and initial value
-        TextField positionInputTextField = new TextField();
+        Slider positionInputSlider = new Slider();
+        double minPositionValue = 0-(plankLength/2); double maxPositionValue = (plankLength/2); int initialPositionValue = 0; //creating min/max/initial values for positionInputs
+        positionInputSlider.setMin(minPositionValue); positionInputSlider.setMax(maxPositionValue); positionInputSlider.setValue(initialPositionValue); //setting sliders max min and initial value
+        IntField positionInputTextField = new IntField(minPositionValue,maxPositionValue,initialPositionValue); //min/max/initial set by constructor
         //code to link slider and textfield together.
-        positionInputTextField.textProperty().bindBidirectional(positionInputSlider.valueProperty(), NumberFormat.getNumberInstance());
+        positionInputTextField.textProperty().bindBidirectional(positionInputSlider.valueProperty(), NumberFormat.getNumberInstance()); //some error here which doesnt stop running the code?
         forcePositionSection.getChildren().addAll(positionLabel,positionInputSlider,positionInputTextField);
         
         //submit force button and action
@@ -87,19 +94,21 @@ public class guiCreation{
         submitForce.setOnAction(e -> {
             forceClass createdForce = new forceClass(Integer.parseInt(magInput.getText()),Math.toRadians(angleInputSlider.getValue()),positionInputSlider.getValue());
             simulation.addForce(createdForce);
-            //need to remove/replace children with inputted data.
         });
         forceConfig.getChildren().addAll(magInput,forceAngleSection,forcePositionSection,submitForce);
         return forceConfig;
     }
 
     public static void updateInformation(){
-        //String currentSumOfCW = Double.toString(currentSimulation.getSumOfCW());
-        //guiCreation.sumOfCWLabel.setText(currentSumOfCW);
-        //String currentSumOfACW = Double.toString(currentSimulation.getSumOfACW());
-        //guiCreation.sumOfACWLabel.setText(currentSumOfACW);
-        //String currentResultantMoment = Double.toString(currentSimulation.getResultantMoment());
-        //guiCreation.resultantMomentLabel.setText(currentResultantMoment);
+        //guiCreation.momentInformation = new VBox();
+        String stringOfCW = simulation.getSumOfCW() + "CW";
+        labelCW.setText(stringOfCW);//Label labelOfCW = new Label(stringOfCW);
+        String stringOfACW = simulation.getSumOfACW() + "ACW";
+        labelACW.setText(stringOfACW);//Label labelOfACW = new Label(stringOfACW);
+        String stringResultantMoment = simulation.getResultantMoment() + "RM";
+        labelRM.setText(stringResultantMoment);//Label labelResultantMoment = new Label(stringResultantMoment);
+        guiCreation.momentInformation.getChildren().removeAll(guiCreation.labelCW,guiCreation.labelACW,guiCreation.labelRM);
+        guiCreation.momentInformation.getChildren().addAll(guiCreation.labelCW,guiCreation.labelACW,guiCreation.labelRM); //not working.
     } 
 
 }
